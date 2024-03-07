@@ -7,4 +7,9 @@ export default class TeamsService {
     const teams = await this.TeamM.findAll();
     return { status: 200, data: teams };
   }
+
+  public async getTeamById(id: number) {
+    const team = await this.TeamM.findById(id);
+    return { status: 200, data: team };
+  }
 }

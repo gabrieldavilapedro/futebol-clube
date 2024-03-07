@@ -9,4 +9,9 @@ export default class TeamModel implements TeamModelInterface {
     const teams = await this.model.findAll();
     return teams.map((team) => team.get());
   }
+
+  async findById(id: number): Promise<Team | null> {
+    const team = await this.model.findByPk(id);
+    return team ? team.get() : null;
+  }
 }
