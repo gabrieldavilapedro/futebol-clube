@@ -15,10 +15,14 @@ export default class UsersService {
   async login(user: UserLogin): Promise<serviceResponse<Token>> {
     const { email, password } = user as UserLogin;
     const userFound = await this.userModel.login(email);
+    const emailRegex = /^[a-zA-Z]+@.+\.(com)$/;
 
     if (!email || !password) return { status: 400, data: { message: 'All fields must be filled' } };
 
-    if (userFound === null || !bcrypt.compareSync(password, userFound.password)) {
+    if (userFound === null
+      || !emailRegex.test(email)
+      || !bcrypt.compareSync(password, userFound.password)
+    ) {
       return { status: 401, data: { message: 'Invalid email or password' } };
     }
 
