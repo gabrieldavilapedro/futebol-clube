@@ -1,5 +1,5 @@
-import { TeamModelInterface } from '../Interfaces/TeamModelInterface';
-import { Team } from '../Interfaces/Team';
+import { TeamModelInterface } from '../Interfaces/teams/TeamModelInterface';
+import { Team } from '../Interfaces/teams/Team';
 import TeamModelS from '../database/models/Team.Model';
 
 export default class TeamModel implements TeamModelInterface {
