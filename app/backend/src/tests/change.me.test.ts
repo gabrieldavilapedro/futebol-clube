@@ -9,39 +9,59 @@ import Example from '../database/models/ExampleModel';
 import { Response } from 'superagent';
 
 import TeamModel from '../models/Teams.model';
+import UserModel from '../models/Users.model';
 
 chai.use(chaiHttp);
 
 const { expect } = chai;
 
-describe('teste para rota Teams ', () => {
-  it('deve retornar um array de times', async () => {
-    const TeamsMock = [
-      { id: 1, teamName: 'Flamengo' },
-      { id: 2, teamName: 'Vasco' },
-    ];
+describe('testes ', () => {
+  describe('teste para rota Teams ', () => {
+    it('deve retornar um array de times', async () => {
+      const TeamsMock = [
+        { id: 1, teamName: 'Flamengo' },
+        { id: 2, teamName: 'Vasco' },
+      ];
 
-    sinon.stub(TeamModel.prototype, 'findAll').resolves(TeamsMock);
-    const { status, body } = await chai.request(app).get('/teams');
+      sinon.stub(TeamModel.prototype, 'findAll').resolves(TeamsMock);
+      const { status, body } = await chai.request(app).get('/teams');
 
-    expect(status).to.equal(200);
-    expect(body).to.deep.equal(TeamsMock);
+      expect(status).to.equal(200);
+      expect(body).to.deep.equal(TeamsMock);
+    });
+
+    it('deve retornar um time', async () => {
+      const TeamMock = { id: 1, teamName: 'Flamengo' };
+
+      sinon.stub(TeamModel.prototype, 'findById').resolves(TeamMock);
+      const { status, body } = await chai.request(app).get('/teams/1');
+
+      expect(status).to.equal(200);
+      expect(body).to.deep.equal(TeamMock);
+    });
+
+    it('deve retornar um erro 404', async () => {
+      sinon.stub(TeamModel.prototype, 'findById').resolves(null);
+      const { status } = await chai.request(app).get('/teams/666');
+
+      expect(status).to.equal(404);
+    });
   });
+  describe('teste para rota login ', () => {
+    it('deve retornar um token', async () => {
 
-  it('deve retornar um time', async () => {
-    const TeamMock = { id: 1, teamName: 'Flamengo' };
+      const userMock = {
+        username: 'Admin',
+        role: 'admin',
+        email: 'admin@admin.com',
+        password: '$2a$08$xi.Hxk1czAO0nZR..B393u10aED0RQ1N3PAEXQ7HxtLjKPEZBu.PW'
+      }
 
-    sinon.stub(TeamModel.prototype, 'findById').resolves(TeamMock);
-    const { status, body } = await chai.request(app).get('/teams/1');
+      sinon.stub(UserModel.prototype, 'login').resolves(userMock);
+      const { status, body } = await chai.request(app).post('/login').send({ email: 'admin@admin.com' });
 
-    expect(status).to.equal(200);
-    expect(body).to.deep.equal(TeamMock);
-  });
-
-  it('deve retornar um erro 404', async () => {
-    sinon.stub(TeamModel.prototype, 'findById').resolves(null);
-    const { status } = await chai.request(app).get('/teams/666');
-
-    expect(status).to.equal(404);
+      expect(status).to.equal(200);
+      expect(body).to.have.property('token');
+    });
   });
 });
