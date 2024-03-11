@@ -1,4 +1,5 @@
 import * as bcrypt from 'bcryptjs';
+import PayloadUser from '../Interfaces/users/payload';
 import { Token } from '../Interfaces/users/token';
 import JWT from '../utils/JTW';
 import { UserLogin } from '../Interfaces/users/User';
@@ -28,5 +29,21 @@ export default class UsersService {
 
     const token = this.jwt.tokenGenerate({ email });
     return { status: 200, data: { token } };
+  }
+
+  async getRole(token: string): Promise<serviceResponse<UserLogin>> {
+    if (!token) {
+      return { status: 400, data: { message: 'Token not found' } };
+    }
+    const extractT = this.jwt.extractT(token);
+    const userE = this.jwt.verify(extractT);
+    const { email } = userE as PayloadUser;
+    const user = await this.userModel.login(email);
+    
+    if (user) {
+      const { role } = user;
+      return { status: 200, data: { role } };
+    }
+    return { status: 404, data: { message: 'User not found' } };
   }
 }

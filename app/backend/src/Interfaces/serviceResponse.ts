@@ -1,10 +1,11 @@
 type serviceMessage = { message: string };
+type servicemessageRole = { role: string };
 
 type serviceResponseErrorE = number;
 
 export type serviceResponseError = {
   status: serviceResponseErrorE
-  data: serviceMessage
+  data: serviceMessage | servicemessageRole
 };
 
 export type serviceResponseSuccess<T> = {

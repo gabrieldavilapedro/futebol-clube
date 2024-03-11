@@ -8,7 +8,7 @@ export default class JWT {
     algorithm: 'HS256',
   };
 
-  static extractToken(token: string): string {
+  static extractT(token: string): string {
     return token.split(' ')[1];
   }
 
