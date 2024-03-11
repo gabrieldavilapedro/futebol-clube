@@ -39,7 +39,7 @@ export default class UsersService {
     const userE = this.jwt.verify(extractT);
     const { email } = userE as PayloadUser;
     const user = await this.userModel.login(email);
-    
+
     if (user) {
       const { role } = user;
       return { status: 200, data: { role } };
