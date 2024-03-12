@@ -10,6 +10,7 @@ import { Response } from 'superagent';
 
 import TeamModel from '../models/Teams.model';
 import UserModel from '../models/Users.model';
+import MatchesModel from '../models/Matches.model';
 
 chai.use(chaiHttp);
 
@@ -62,6 +63,34 @@ describe('testes ', () => {
 
       expect(status).to.equal(200);
       expect(body).to.have.property('token');
+    });
+  });
+  describe('teste para rota Matches ', () => {
+    it('deve retornar um array de partidas', async () => {
+      const MatchesMock =
+        [
+          {
+            "id": 1,
+            "homeTeamId": 16,
+            "homeTeamGoals": 1,
+            "awayTeamId": 8,
+            "awayTeamGoals": 1,
+            "inProgress": false,
+            "homeTeam": {
+              "teamName": "São Paulo"
+            },
+            "awayTeam": {
+              "teamName": "Grêmio"
+            }
+          },
+
+        ];
+
+      sinon.stub(MatchesModel.prototype, 'getMatches').resolves(MatchesMock);
+      const { status, body } = await chai.request(app).get('/matches');
+
+      expect(status).to.equal(200);
+      expect(body).to.deep.equal(MatchesMock);
     });
   });
 });
