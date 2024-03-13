@@ -61,4 +61,9 @@ export default class MatchesModel {
     const update = await this.model.update({ homeTeamGoals, awayTeamGoals }, { where: { id } });
     return update;
   }
+
+  async createMatch(match: Match) {
+    const newMatch = await this.model.create(match);
+    return newMatch;
+  }
 }

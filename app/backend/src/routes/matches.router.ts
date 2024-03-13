@@ -20,4 +20,10 @@ router.patch(
   (req: Request, res: Response) => matchesRouter.upudateGolsMatch(req, res),
 );
 
+router.post(
+  '/',
+  TokenValidation.verifyToken,
+  (req: Request, res: Response) => matchesRouter.createMatch(req, res),
+);
+
 export default router;
