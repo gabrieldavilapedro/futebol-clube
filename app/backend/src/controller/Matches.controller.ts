@@ -22,4 +22,15 @@ export default class MatchesController {
     }
     return res.status(200).json(matcheFinish.data);
   }
+
+  public async upudateGolsMatch(req: Request, res: Response) {
+    const { id } = req.params;
+    const { homeTeamGoals, awayTeamGoals } = req.body;
+    const matcheFinish = await this.MatchesS
+      .upudateGolsMatch(Number(id), homeTeamGoals, awayTeamGoals);
+    if (matcheFinish.status !== 200) {
+      return res.status(matcheFinish.status).json(matcheFinish.data);
+    }
+    return res.status(200).json(matcheFinish.data);
+  }
 }

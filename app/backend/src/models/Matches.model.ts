@@ -56,4 +56,9 @@ export default class MatchesModel {
     const matcheById = await this.model.findByPk(id);
     return matcheById;
   }
+
+  async updateGolsMatch(id: number, homeTeamGoals: number, awayTeamGoals: number) {
+    const update = await this.model.update({ homeTeamGoals, awayTeamGoals }, { where: { id } });
+    return update;
+  }
 }
