@@ -46,4 +46,14 @@ export default class MatchesModel {
     });
     return matches;
   }
+
+  async updateToFinish(id: number) {
+    const update = await this.model.update({ inProgress: false }, { where: { id } });
+    return update;
+  }
+
+  async getMatcheById(id: number) {
+    const matcheById = await this.model.findByPk(id);
+    return matcheById;
+  }
 }

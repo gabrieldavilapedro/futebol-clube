@@ -4,9 +4,6 @@ import * as chai from 'chai';
 import chaiHttp = require('chai-http');
 
 import { app } from '../app';
-import Example from '../database/models/ExampleModel';
-
-import { Response } from 'superagent';
 
 import TeamModel from '../models/Teams.model';
 import UserModel from '../models/Users.model';
@@ -64,6 +61,7 @@ describe('testes ', () => {
       expect(status).to.equal(200);
       expect(body).to.have.property('token');
     });
+
   });
   describe('teste para rota Matches ', () => {
     it('deve retornar um array de partidas', async () => {
