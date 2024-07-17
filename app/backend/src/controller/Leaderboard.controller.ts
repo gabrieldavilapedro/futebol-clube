@@ -6,9 +6,10 @@ export default class LeaderboardController {
 
   public async getLeaderboard(req: Request, res: Response) {
     const route = req.originalUrl.split('/').pop();
-    const leaderboard = await this.leaderboardService.getLeaderboard(route);
+    const leaderboard = await this.leaderboardService.getLeaderboardHomeOrAway(route);
     const { status, data } = leaderboard;
     if (status !== 200) return res.status(status).json(data);
     return res.status(200).json(leaderboard.data);
   }
+
 }
