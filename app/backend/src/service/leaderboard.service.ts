@@ -6,11 +6,13 @@ export default class LeaderboardService {
   constructor(
     private teamModel: TeamModel = new TeamModel(),
     private matchesModel: MatchesModel = new MatchesModel(),
-  ) {}
+  ) { }
 
-  public async getLeaderboard() {
+  public async getLeaderboard(route: string = 'home') {
     const teams = await this.teamModel.findAll();
     const matches = await this.matchesModel.getInProgressFalse();
+
+    const isHomeTeam = route === 'home';
 
     // Cria um novo objeto Performance para cada equipe
     const allPerformance = teams.map((team) => new Performance(team.teamName, team.id));
@@ -18,7 +20,10 @@ export default class LeaderboardService {
     // Para cada partida, atualiza a tabela de atributos da equipe da casa
     matches.forEach((match) => {
       const homeTeamPerformance = allPerformance.filter((team) => team.id === match.homeTeamId)[0];
-      homeTeamPerformance.tableOfAtributes(match.homeTeamGoals, match.awayTeamGoals);
+      const awayTeamPerformance = allPerformance.filter((team) => team.id === match.awayTeamId)[0];
+
+      if (isHomeTeam) homeTeamPerformance.updateAttributes(match.homeTeamGoals, match.awayTeamGoals, isHomeTeam);
+      else awayTeamPerformance.updateAttributes(match.homeTeamGoals, match.awayTeamGoals, isHomeTeam);
     });
 
     // Ordena a tabela de classificação com base em vários critérios

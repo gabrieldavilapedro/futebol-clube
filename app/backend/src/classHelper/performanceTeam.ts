@@ -25,26 +25,38 @@ export default class Performance {
     this._efficiency = 0;
   }
 
-  public tableOfAtributes(homeGoals: number, awayGoals: number) {
+  public updateAttributes(homeGoals: number, awayGoals: number, isHomeTeam: boolean) {
     this.totalGames += 1;
 
-    this.goalsFavor += homeGoals;
-    this.goalsOwn += awayGoals;
+    if (isHomeTeam) {
+      this.goalsFavor += homeGoals;
+      this.goalsOwn += awayGoals;
+
+      if (homeGoals > awayGoals) {
+        this.totalVictories += 1;
+        this.totalPoints += 3;
+      } else if (homeGoals === awayGoals) {
+        this.totalDraws += 1;
+        this.totalPoints += 1;
+      } else {
+        this.totalLosses += 1;
+      }
+    } else {
+      this.goalsFavor += awayGoals;
+      this.goalsOwn += homeGoals;
+
+      if (awayGoals > homeGoals) {
+        this.totalVictories += 1;
+        this.totalPoints += 3;
+      } else if (awayGoals === homeGoals) {
+        this.totalDraws += 1;
+        this.totalPoints += 1;
+      } else {
+        this.totalLosses += 1;
+      }
+    }
 
     this._goalsBalance = this.goalsFavor - this.goalsOwn;
-
-    if (homeGoals > awayGoals) {
-      this.totalVictories += 1;
-      this.totalPoints += 3;
-    }
-    if (homeGoals === awayGoals) {
-      this.totalDraws += 1;
-      this.totalPoints += 1;
-    }
-    if (homeGoals < awayGoals) {
-      this.totalLosses += 1;
-    }
-
     this._efficiency = parseFloat(((this.totalPoints / (this.totalGames * 3)) * 100).toFixed(2));
   }
 
