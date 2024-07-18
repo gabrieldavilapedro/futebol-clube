@@ -8,10 +8,9 @@ export default class LeaderboardService {
     private matchesModel: MatchesModel = new MatchesModel(),
   ) { }
 
-  public async getLeaderboardHomeOrAway(route: string = 'home') {
+  public async getLeaderboard(route: string = 'home') {
     const teams = await this.teamModel.findAll();
     const matches = await this.matchesModel.getInProgressFalse();
-
     const allPerformance = teams.map((team) => new Performance(team.teamName, team.id));
 
     matches.forEach((match) => {
@@ -29,13 +28,10 @@ export default class LeaderboardService {
 
     const leaderboard = allPerformance.map((team) => team.Performance).sort((a, b) => {
       if (a.totalPoints !== b.totalPoints) return b.totalPoints - a.totalPoints;
-
       if (a.totalVictories !== b.totalVictories) return b.totalVictories - a.totalVictories;
-
       if ((a.goalsFavor - a.goalsOwn) !== (b.goalsFavor - b.goalsOwn)) {
         return (b.goalsFavor - b.goalsOwn) - (a.goalsFavor - a.goalsOwn);
       }
-
       return b.goalsFavor - a.goalsFavor;
     });
     return { status: 200, data: leaderboard };
